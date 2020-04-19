@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Tileshade",
+    "slug": "Tileshade",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nmelentjevs.colory",
+      "publishBundlePath": "ios/Tileshade/Supporting/shell-app.bundle",
+      "publishManifestPath": "ios/Tileshade/Supporting/shell-app-manifest.json"
+    },
+    "description": "Game about colours. Made with colours.",
+    "githubUrl": "https://github.com/nmelentjevs/colory",
+    "scheme": "exp5d9c62a83f16485aba2234664f26b0ca",
+    "detach": {
+      "iosExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/ios-v2.14.6-sdk36.0.0-8ea388d1-463b-4e91-bbf7-2d95d0174c96.tar.gz",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.14.2-sdk36.0.0-ce7e16db-fd5d-4fdd-bdeb-701ba94a04d1.tar.gz"
+    },
+    "facebookAppId": "242832140428916",
+    "facebookDisplayName": "Colory Tiles",
+    "android": {
+      "package": "colory.android",
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
+    },
+    "isDetached": true,
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  }
+}
