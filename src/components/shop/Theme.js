@@ -76,8 +76,9 @@ const Theme = ({
         setActive(false);
         disableTheme(name);
       } else {
-        setLoading(true);
         // IF PAYMENT SUCCESS
+        setLoading(true);
+        console.log(`${name}_theme_colours`);
         console.log('Purchasing');
         requestPurchase(`${name}_theme_colours`);
         // // MOCK

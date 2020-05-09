@@ -35,12 +35,13 @@ import Addons from '../components/shop/Addons';
 const items = Platform.select({
   ios: [
     'premium_theme_colours',
-    'shadow_theme_colours',
     'woodoo_theme_colours',
+    'shadow_theme_colours',
+    'orchide_theme_colours',
     'stylish_theme_colours',
     'arctic_theme_colours',
     'mystery_theme_colours',
-    'orchide_theme_colours',
+    'rose_theme_colours',
     'leaf_theme_colours',
     'neon_theme_colours',
     'support_cookie',
@@ -52,10 +53,11 @@ const items = Platform.select({
     'premium_theme_colours',
     'shadow_theme_colours',
     'woodoo_theme_colours',
+    'orchide_theme_colours',
     'stylish_theme_colours',
     'arctic_theme_colours',
     'mystery_theme_colours',
-    'orchide_theme_colours',
+    'rose_theme_colours',
     'leaf_theme_colours',
     'neon_theme_colours',
     'support_cookie',
@@ -83,8 +85,87 @@ const ShopScreen = ({ navigation: { addListener } }) => {
     turnOffAds,
   } = useContext(AdsContext);
 
+  // useEffect(() => {
+  //   console.log('LOADING', loading);
+  //   const didFocus = addListener('didFocus', () => {
+  //     // APPLE PURCHASED SHOULD GO HERE
+  //     // SET IAP LISTENERS
+  //     purchaseUpdateSubscription = purchaseUpdatedListener(async (purchase) => {
+  //       setLoading(false);
+  //       const receipt = purchase.transactionReceipt;
+  //       if (receipt) {
+  //         console.log(1);
+  //         try {
+  //           if (Platform.OS === 'ios') {
+  //             // Handle themes purchase
+  //             if (purchase.productId.includes('colours')) {
+  //               let theme = purchase.productId.split('_')[0];
+  //               await AsyncStorage.setItem(theme, 'active');
+  //               console.log(2);
+  //               activateTheme(theme);
+  //             }
+  //             // Handle turn off ads purchase
+  //             if (purchase.productId.includes('ads')) {
+  //               await AsyncStorage.setItem('ads', 'hide');
+  //               console.log(3);
+  //               turnOffAds();
+  //             }
+
+  //             // Finish transaction
+  //             finishTransactionIOS(purchase.transactionId);
+  //           } else if (Platform.OS === 'android') {
+  //             console.log(3);
+  //             // If consumable (can be purchased again)
+  //             consumePurchaseAndroid(purchase.purchaseToken);
+  //             // If not consumable
+  //             acknowledgePurchaseAndroid(purchase.purchaseToken);
+  //           }
+  //           finishTransaction(purchase);
+  //         } catch (ackErr) {
+  //           setLoading(false);
+  //           console.warn('ackErr', ackErr);
+  //         }
+  //       }
+  //     });
+
+  //     purchaseErrorSubscription = purchaseErrorListener((error) => {
+  //       setLoading(false);
+  //       console.log('purchaseErrorListener', error);
+  //       Alert.alert(
+  //         'Purchase Error',
+  //         'There was an error processing your purchase'
+  //       );
+  //     });
+
+  //     getItems = async () => {
+  //       try {
+  //         await RNIap.initConnection();
+  //         const products = await RNIap.getProducts(items);
+  //         console.log('Products', products.length);
+  //       } catch (err) {
+  //         console.warn(err.code, err.message);
+  //       }
+  //     };
+  //     getItems();
+  //   });
+
+  //   return () => {
+  //     didFocus.remove();
+  //   };
+  // }, []);
+
+  // const requestPurchase = async (sku) => {
+  //   setLoading(true);
+
+  //   RNIap.requestPurchase(sku, false)
+  //     .then((_) => setLoading(false))
+  //     .catch((err) => {
+  //       setLoading(false);
+  //       console.warn(err.code, err.message);
+  //     });
+  // };
+
   useEffect(() => {
-    console.log('LOADING', loading);
     const didFocus = addListener('didFocus', () => {
       // APPLE PURCHASED SHOULD GO HERE
     });
@@ -100,26 +181,23 @@ const ShopScreen = ({ navigation: { addListener } }) => {
             if (purchase.productId.includes('colours')) {
               let theme = purchase.productId.split('_')[0];
               await AsyncStorage.setItem(theme, 'active');
-              console.log(2);
               activateTheme(theme);
             }
             // Handle turn off ads purchase
             if (purchase.productId.includes('ads')) {
               await AsyncStorage.setItem('ads', 'hide');
-              console.log(3);
               turnOffAds();
             }
 
             // Finish transaction
             finishTransactionIOS(purchase.transactionId);
           } else if (Platform.OS === 'android') {
-            setLoading(false);
             // If consumable (can be purchased again)
             consumePurchaseAndroid(purchase.purchaseToken);
             // If not consumable
             acknowledgePurchaseAndroid(purchase.purchaseToken);
           }
-          finishTransaction(purchase);
+          finishTransaction(purchase, false).then(console.log);
         } catch (ackErr) {
           setLoading(false);
           console.warn('ackErr', ackErr);
@@ -133,12 +211,12 @@ const ShopScreen = ({ navigation: { addListener } }) => {
       Alert.alert(
         'Purchase Error',
         'There was an error processing your purchase'
+        // JSON.stringify(error)
       );
     });
 
     getItems = async () => {
       try {
-        await RNIap.initConnection();
         const products = await RNIap.getProducts(items);
         console.log('Products', products.length);
       } catch (err) {
@@ -154,7 +232,7 @@ const ShopScreen = ({ navigation: { addListener } }) => {
 
   const requestPurchase = async (sku) => {
     try {
-      await RNIap.requestPurchase(sku);
+      await RNIap.requestPurchase(sku, false);
     } catch (err) {
       console.warn(err.code, err.message);
     }

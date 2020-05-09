@@ -38,7 +38,6 @@ const Addons = ({
     if (showAds) {
       setLoading(true);
       console.log('Remove Ads');
-      await AsyncStorage.setItem('ads', 'hide');
       requestPurchase('remove_ads');
     }
   };

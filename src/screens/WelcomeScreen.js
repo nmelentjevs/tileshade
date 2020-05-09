@@ -53,14 +53,11 @@ const WelcomeScreen = ({ navigation: { addListener } }) => {
     state: { showAds },
     turnOffAds,
   } = useContext(AdsContext);
-
-  const [loading, setLoading] = useState(true);
-  const [welcomeShow, setWelcomeShow] = useState(false);
+  console.log('SHOW ADS', showAds);
 
   useEffect(() => {
     const firstTime = async () => {
       const first = await AsyncStorage.getItem('first');
-      setWelcomeShow(true);
       if (!first) {
       }
     };
@@ -94,24 +91,16 @@ const WelcomeScreen = ({ navigation: { addListener } }) => {
 
     // GET PAST IAP, SET THEMES
     const getPurchases = async () => {
-      let themes = [];
-      try {
-        const result = await RNIap.initConnection();
-        console.log('In-app purchases connected ::', result);
-        RNIap.getPurchaseHistory()
-          .then((purchases) => {
-            themes = purchases.map((item) => {
-              return item.productId.split('_')[0];
-            });
-          })
-          .catch(console.log);
-      } catch (err) {
-        console.warn(err); // standardized err.code and err.message available
-        Alert.alert(err.message);
-      }
+      const result = await RNIap.initConnection();
+      console.log('In-app purchases connected ::', result);
+      const themes = (await RNIap.getPurchaseHistory()).map((item) => {
+        return item.productId.split('_')[0];
+      });
 
       return {
-        adBlock: await AsyncStorage.getItem('ads'),
+        adBlock: themes.includes('remove')
+          ? 'hide'
+          : await AsyncStorage.getItem('ads'),
         themes: await Promise.all(
           [
             'orchide',
@@ -123,8 +112,12 @@ const WelcomeScreen = ({ navigation: { addListener } }) => {
             'mystery',
             'shadow',
             'woodoo',
-          ].map((x, i) =>
-            themes.includes(x) ? AsyncStorage.getItem(x) : false
+          ].map(async (x, i) =>
+            themes.includes(x)
+              ? AsyncStorage.getItem(x) === null
+                ? AsyncStorage.setItem(x, 'purchased') && 'purchased'
+                : AsyncStorage.setItem(x, 'active') && 'active'
+              : false
           )
         ),
       };
@@ -133,8 +126,7 @@ const WelcomeScreen = ({ navigation: { addListener } }) => {
     // GET PURCHASES
     getPurchases()
       .then((purchases) => {
-        setLoading(false);
-        console.log('Purchases', purchases);
+        // console.log('Purchases', purchases);
         // TURN OFF ADS IF AD BLOCK
         if (purchases.adBlock === 'hide') {
           turnOffAds();
@@ -178,9 +170,7 @@ const WelcomeScreen = ({ navigation: { addListener } }) => {
       {/* <Colored>
         <FirstTime welcomeShow={welcomeShow} setWelcomeShow={setWelcomeShow} />
       </Colored> */}
-      {!loading && showAds ? (
-        <BannerAd unitId={adUnitId} size="SMART_BANNER" />
-      ) : null}
+      {showAds ? <BannerAd unitId={adUnitId} size="SMART_BANNER" /> : null}
     </Block>
   );
 };

@@ -11,14 +11,14 @@ const timerReducer = (state, action) => {
     case 'stop_time':
       return { ...state, moving: false };
     case 'reset':
-      return { ...state, time: 30 };
+      return { ...state, time: 20 };
     default:
       return state;
   }
 };
 
 const initialState = {
-  time: 30,
+  time: 20,
   moving: false,
 };
 

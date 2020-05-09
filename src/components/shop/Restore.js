@@ -34,20 +34,14 @@ const Restore = ({ setLoading }) => {
   const handleRestore = async () => {
     setLoading(true);
     const getPurchases = async () => {
-      let themes = [];
-      try {
-        RNIap.getPurchaseHistory().then((history) => {
-          themes = history.map((item) => {
-            return item.productId.split('_')[0];
-          });
-        });
-      } catch (err) {
-        console.warn(err); // standardized err.code and err.message available
-        Alert.alert(err.message);
-      }
+      const themes = (await RNIap.getPurchaseHistory()).map((item) => {
+        return item.productId.split('_')[0];
+      });
 
       return {
-        adBlock: await AsyncStorage.getItem('ads'),
+        adBlock: themes.includes('remove')
+          ? 'hide'
+          : await AsyncStorage.getItem('ads'),
         themes: await Promise.all(
           [
             'orchide',
@@ -59,7 +53,7 @@ const Restore = ({ setLoading }) => {
             'mystery',
             'shadow',
             'woodoo',
-          ].map((x, i) =>
+          ].map(async (x, i) =>
             themes.includes(x)
               ? AsyncStorage.getItem(x) === null
                 ? AsyncStorage.setItem(x, 'purchased') && 'purchased'
@@ -74,7 +68,7 @@ const Restore = ({ setLoading }) => {
     getPurchases()
       .then((history) => {
         setLoading(false);
-        console.log('History', history);
+        // console.log('History', history);
         // TURN OFF ADS IF AD BLOCK
         if (history.adBlock === 'hide') {
           turnOffAds();
@@ -87,9 +81,9 @@ const Restore = ({ setLoading }) => {
 
   return (
     <>
-      <Text h3 center bold color={heading} style={{ marginBottom: 10 }}>
+      {/* <Text h3 center bold color={heading} style={{ marginBottom: 10 }}>
         Restore purchases
-      </Text>
+      </Text> */}
       <TouchableOpacity
         activeOpacity={Platform.OS === 'ios' ? 0.6 : 0.95}
         onPress={() => handleRestore()}
@@ -103,12 +97,12 @@ const Restore = ({ setLoading }) => {
           background={buttonBackground}
           border={buttonBorder}
           style={{
-            width: 125,
+            width: 200,
             height: 40,
           }}
         >
           <Text center semibold color={buttonText} style={styles.text}>
-            Restore
+            Restore Purchases
           </Text>
         </Morph>
       </TouchableOpacity>

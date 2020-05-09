@@ -45,6 +45,11 @@ const Field = ({ mode }) => {
                     : 70) -
                   2 * 5 * columns) /
                 columns
+              : screen.height > 1000
+              ? (playWidth -
+                  (mode === 'easy' ? 300 : mode === 'medium' ? 250 : 275) -
+                  2 * 5 * columns) /
+                columns
               : (playWidth - 30 - 2 * 5 * columns) / columns
             : (playWidth -
                 (mode === 'easy' ? 400 : mode === 'medium' ? 350 : 375) -

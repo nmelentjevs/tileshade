@@ -39,6 +39,7 @@ const NicknameInput = ({ colors: { buttonText, heading } }) => {
             color: buttonText,
             borderBottomColor: heading,
             minWidth: Platform.OS === 'android' ? 155 : 140,
+            textAlign: 'center',
           }}
           onSubmitEditing={enteredNickname}
         />

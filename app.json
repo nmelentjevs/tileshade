@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Tileshade",
-    "slug": "Tileshade",
+    "name": "colory-tiles",
+    "slug": "colory-tiles",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,9 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nmelentjevs.colory",
-      "publishBundlePath": "ios/Tileshade/Supporting/shell-app.bundle",
-      "publishManifestPath": "ios/Tileshade/Supporting/shell-app-manifest.json"
+      "bundleIdentifier": "com.nmelentjevs.colory"
     },
     "description": "Game about colours. Made with colours.",
     "githubUrl": "https://github.com/nmelentjevs/colory",
@@ -31,9 +29,7 @@
     "facebookAppId": "242832140428916",
     "facebookDisplayName": "Colory Tiles",
     "android": {
-      "package": "colory.android",
-      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
-      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
+      "package": "colory.android"
     },
     "isDetached": true,
     "entryPoint": "node_modules/expo/AppEntry.js"
